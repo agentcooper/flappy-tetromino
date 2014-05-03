@@ -2,7 +2,7 @@
  * @example
  *   random(0, 5)            // => random integer between 0 and 5
  *   random(['a', 'b', 'c']) // => random array item
- *   ranomd(1.0, 9.0, true)  // => random float between 1.0 and 9.0
+ *   random(1.0, 9.0, true)  // => random float between 1.0 and 9.0
  */
 function random(from, to, floats) {
     if (Array.isArray(from)) {
