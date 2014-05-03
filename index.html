@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <title>Flappy Tetromino</title>
+        <style>
+            canvas { width: 800; height: 480; }
+            body { margin: 0; padding: 0 }
+
+            .help {
+                display: none;
+
+                padding: 1em;
+                font-family: Verdana;
+            }
+
+            .loaded .help {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+
+        <div class="help">
+            <h1>Flappy Tetromino</h1>
+
+            <p>Press spacebar to continue, use mouse to control, A/D to rotate</p>
+        </div>
+
+        <script src="three.min.js"></script>
+        <script src="tween.min.js"></script>
+        <script src="ThreeCSG.js"></script>
+
+        <script src="helpers.js"></script>
+        <script src="app.js"></script>
+    </body>
+</html>
