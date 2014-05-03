@@ -7,7 +7,7 @@ document.getElementById('container').appendChild(renderer.domElement);
 document.body.className = 'loaded';
 
 renderer.domElement.oncontextmenu = function() {
-     return false;  
+  return false;  
 };
 
 var camera = new THREE.PerspectiveCamera(
@@ -19,9 +19,21 @@ var camera = new THREE.PerspectiveCamera(
 
 camera.position.set(0, 0, 3);
 
-var WALL_BLOCK_SIZE = 0.5;
 var PLAYER_BLOCK_SIZE = 0.5;
 
+var SPEED = 0.09;
+
+var LIMIT = 5.5;
+
+var pause = true;
+
+var caster = new THREE.Raycaster();
+
+var playerBlock = new THREE.BoxGeometry(
+  PLAYER_BLOCK_SIZE, PLAYER_BLOCK_SIZE, PLAYER_BLOCK_SIZE
+);
+
+// http://flatuicolors.com/
 var WALL_COLORS = [
   0x3498db,
   0xe74c3c,
@@ -34,22 +46,6 @@ var WALL_COLORS = [
     color: color
   });
 });
-
-var caster = new THREE.Raycaster();
-
-var playerRotation = 0;
-
-var SPEED = 0.09;
-
-var pause = true;
-
-var playerBlock = new THREE.BoxGeometry(
-  PLAYER_BLOCK_SIZE, PLAYER_BLOCK_SIZE, PLAYER_BLOCK_SIZE
-);
-
-var wallBlock = new THREE.BoxGeometry(
-  WALL_BLOCK_SIZE, WALL_BLOCK_SIZE, WALL_BLOCK_SIZE
-);
 
 var playerMaterial = new THREE.MeshPhongMaterial({
   map: THREE.ImageUtils.loadTexture(
@@ -64,12 +60,13 @@ var player = renderGrid(
   playerBlock,
   PLAYER_BLOCK_SIZE,
   [
-    [0, 0, 0],
     [1, 0, 0],
     [1, 1, 1]
   ],
   playerMaterial
 );
+
+var playerRotation = 0;
 
 player.position.set(0, 0, 0);
 
@@ -107,7 +104,7 @@ var center = {
   y: center.y
 };
 
-var pointLight = new THREE.PointLight( 0xffffff, 1.2, 25 );
+var pointLight = new THREE.PointLight(0xffffff, 1.2, 25);
 
 scene.add(player);
 scene.add(pointLight);
@@ -166,19 +163,19 @@ function move() {
   var last = world.children[world.children.length - 1];
 
   if (player.position.z - last.position.z < 25) {
-    buildSomeWalls();
+    buildMoreWalls();
   }
 }
 
 var l = 10;
-function buildSomeWalls() {
+function buildMoreWalls() {
   for (var i = 1; i < 5; i++) {
     createWall(l);
     l += 15;
   }
 }
 
-buildSomeWalls();
+buildMoreWalls();
 
 var tween = {
   player: new TWEEN.Tween(player.position),
@@ -201,10 +198,10 @@ function resetOnCollistion() {
   var playerX = -(center.x - mouse.x) / 40;
   var playerY =  (center.y - mouse.y) / 40;
 
-  if (playerX < -4.5) { playerX = -5.0; }
-  if (playerX >  4.5) { playerX =  4.5; }
-  if (playerY < -4.5) { playerY = -5.0; }
-  if (playerY >  4.5) { playerY =  4.5; }
+  if (playerX < -LIMIT) { playerX = -LIMIT; }
+  if (playerX >  LIMIT) { playerX =  LIMIT; }
+  if (playerY < -LIMIT) { playerY = -LIMIT; }
+  if (playerY >  LIMIT) { playerY =  LIMIT; }
 
   tween.player.to({
     x: playerX,
@@ -235,7 +232,9 @@ function resetOnCollistion() {
   renderer.render(scene, camera);
 })();
 
-
+/*
+ * @param {Function} onCollision Callback
+ */
 function checkCollision(onCollision) {
   var originPoint = player.position.clone();
 
