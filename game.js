@@ -53,7 +53,7 @@ var wallBlock = new THREE.BoxGeometry(
 
 var playerMaterial = new THREE.MeshPhongMaterial({
   map: THREE.ImageUtils.loadTexture(
-    'skulls.png'
+    'resource/skulls.png'
   ),
   transparent: true
 });
